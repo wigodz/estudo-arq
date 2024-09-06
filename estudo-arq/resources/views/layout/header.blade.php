@@ -2,20 +2,17 @@
     <nav>
         <ul class="nav justify-content-end nav-tabs ">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
+              <a class="nav-link active" aria-current="page" href="home">Inicial</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Projetos</a>
+              <a class="nav-link" href="home">Confirmação</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Serviços</a>
+              <a class="nav-link" href="presentes">presentes</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Sobre mim</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Contato</a>
-              </li>
+                <a class="nav-link" href="#">Dúvidas</a>
+            </li>
           </ul>
     </nav>
 </header>

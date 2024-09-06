@@ -12,7 +12,12 @@
         <title>Arquitetura e Vida</title>
 
     </head>
-
+<style>
+    html, body {
+            height: 100%;
+            margin: 0;
+        }
+</style>
     <body>
         <div class="container">
             @include('layout.header')

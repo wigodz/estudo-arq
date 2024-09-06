@@ -13,3 +13,7 @@ Route::get('/user', function (Request $request) {
 Route::post('/user', [UserController::class, 'store']);
 
 Route::post('/create-gift', [GiftController::class, 'store']);
+Route::post('/update-gift/{id}', [GiftController::class, 'update']);
+Route::delete('/delete-gift/{id}', [GiftController::class, 'delete']);
+Route::get('/show', [GiftController::class, 'show']);
+
