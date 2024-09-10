@@ -8,10 +8,10 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function store(UserRequest $request, User $user)
+    public function store($data)
     {
-        $data = $request->all();
-        $user->create($data);
+        $data->toArray;
+        User::create($data);
 
         return response()->json('Usuario criado');
     }

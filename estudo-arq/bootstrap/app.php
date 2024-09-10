@@ -17,3 +17,10 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();
+
+    $app->routeMiddleware([
+        'auth' => App\Http\Middleware\Authenticate::class,
+        'auth:sanctum' => Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+    ]);
+    
+    $app->register(Laravel\Sanctum\SanctumServiceProvider::class);
