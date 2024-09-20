@@ -13,7 +13,7 @@ client.on('ready', () => {
 
     // Enviar mensagem
     const number = "553384558906";  // Número do destinatário no formato internacional
-    const message = "teste de envio";
+    const message = "boa noite meu amor";
     const chatId = number + "@c.us"; // Formato esperado pelo WhatsApp
 
     client.sendMessage(chatId, message).then(response => {

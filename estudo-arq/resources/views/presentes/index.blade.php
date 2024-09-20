@@ -48,11 +48,22 @@
     <div class="row">
 
         @foreach($gifts as $gift)
-            <div class="col-md-4"> <!-- ou col-lg-4, col-sm-6, dependendo do layout que você deseja -->
-                <div class="gift-item">
-                    <img src="{{ asset('storage/' .  $gift['image_path']) }}" alt="{{ $gift['name'] }}" class="img-fluid">
-                    <h3>{{ $gift['name'] }}</h3>
-                    <p>{{ $gift['description'] }}</p>
+        <div class="col-md-4">
+                <div class="gift-item" style="text-align: center;">
+                    <img src="{{ asset('storage/' . $gift['image_path']) }}" alt="{{ $gift['name'] }}" class="img-fluid" style="width: 250px; height: 100%; object-fit: cover; border: 2px solid #ddd; border-radius: 4px;">
+                    
+                    <h3 style="margin-top: 10px;">{{ $gift['name'] }}</h3>
+                    {{-- <p>{{ $gift['price'] }} R$</p> --}}
+                    
+                    <p id="description-{{ $gift['id'] }}">
+                        {{ Str::limit($gift['description'], 20) }}
+                        <button type="button" class="btn btn-link" onclick="document.getElementById('full-description-{{ $gift['id'] }}').style.display='block'; this.style.display='none';">Leia mais</button>
+                    </p>
+                    <p id="full-description-{{ $gift['id'] }}" style="display: none;">
+                        {{ $gift['description'] }}
+                        <button type="button" class="btn btn-link" onclick="document.getElementById('full-description-{{ $gift['id'] }}').style.display='none'; document.getElementById('description-{{ $gift['id'] }}').style.display='block';">Fechar</button>
+                    </p>
+                    
                     <a href="{{ $gift['url'] }}" class="btn btn-secondary">Link de desejo</a>
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModalEditGift{{ $gift['id'] }}">Editar</button>
                     <form action="{{ route('delete.gift', $gift['id']) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja deletar?');" style="display:inline;">
@@ -64,6 +75,7 @@
                     </form>
                 </div>
             </div>
+          
             <div class="modal fade" id="ModalEditGift{{ $gift['id'] }}" tabindex="-1" aria-labelledby="ModalEditGiftLabel{{ $gift['id'] }}" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">

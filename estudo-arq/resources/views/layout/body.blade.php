@@ -10,6 +10,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Tangerine:wght@400;700&display=swap" rel="stylesheet">
 
         @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         <title>Arquitetura e Vida</title>
 
@@ -18,6 +19,12 @@
     html, body {
             height: 100%;
             margin: 0;
+            
+            background-image: url({{ asset('storage/images/fundo-page.jpg') }});
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
         }
 </style>
     <body>
