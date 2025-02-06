@@ -48,8 +48,13 @@ class GiftController extends Controller
 
     public function show ()
     {
-        $gifts = Gift::all()->toArray();
+        return view('presentes.index');
+    }
 
-        return view('presentes.index', compact('gifts'));
+    public function getGifts()
+    {
+        $gifts = Gift::paginate(12);
+
+        return response()->json($gifts);
     }
 }

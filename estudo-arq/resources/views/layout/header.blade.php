@@ -86,7 +86,7 @@
               <a class="nav-link active" aria-current="page" href="home">Inicial</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="home">Confirmação</a>
+              <a class="nav-link" href="presenca">Confirmação</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="presentes">presentes</a>
