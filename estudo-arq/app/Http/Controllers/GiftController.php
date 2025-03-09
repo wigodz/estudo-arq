@@ -48,7 +48,8 @@ class GiftController extends Controller
 
     public function show ()
     {
-        return view('presentes.index');
+        $userLogado = auth()->user();
+        return view('presentes.index', compact('userLogado'));
     }
 
     public function getGifts()

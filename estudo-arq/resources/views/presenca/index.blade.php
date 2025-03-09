@@ -12,7 +12,6 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
         color: #fff;
         text-align: center;
         padding: 20px;
@@ -92,10 +91,12 @@
         border: 1px solid #4f0c0f;
     }
 </style>
+
 <div class="background-container">
     <div> 
         <h2 class="tangerine-regular">Não deixe de confirmar sua presença nesse momento tão especial para nós. Você foi escolhido com carinho para fazer parte desse momento e ficaríamos extremamente felizes com sua presença.</h2>
     </div>
+    @if ( $userLogado->presenca == null)
     <div class="row">
         <div class="col-md-12 d-flex align-items-center">
             <div>
@@ -105,8 +106,10 @@
             </div>
         </div>
     </div>
+    @endif
 </div>
 
+@if ($userLogado->is_admin)
 <table>
     <thead>
         <tr>
@@ -141,6 +144,7 @@
 <div class="pagination-container">
     {{ $users->links() }}
 </div>
+@endif
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
