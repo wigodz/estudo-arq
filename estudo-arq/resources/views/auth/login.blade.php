@@ -1,47 +1,59 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+@extends('layout.body-login')
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+@section('content')
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="{{ asset('css/wedding-login.css') }}" rel="stylesheet">
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+<div class="split-screen-container">
+    <!-- Photo Panel (Left side) -->
+    <div class="photo-panel">
+        <img src="{{ asset('storage/images/capa.jpg') }}" alt="Happy Couple" class="couple-image">
+    </div>
+    
+    <!-- Autumn Background (Right side) -->
+    <div class="autumn-panel">
+        <!-- Autumn-themed background is handled by CSS -->
+    </div>
+    
+    <!-- Centered Login Form -->
+    <div class="wedding-login-container">
+        <h1 class="wedding-login-title">Wigo & Isabella</h1>
+        <p class="wedding-login-subtitle">Bem vindos ao nosso casamento</p>
+        
+        <!-- Session Status -->
+        <x-auth-session-status class="mb-4" :status="session('status')" />
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
+            <!-- Email Address -->
+            <div class="wedding-form-group">
+                <x-input-label for="email" :value="__('E-mail')" class="wedding-form-label" />
+                <x-text-input id="email" class="wedding-form-input" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+                <x-input-error :messages="$errors->get('email')" class="wedding-error-message" />
+            </div>
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+            <!-- Password -->
+            <div class="wedding-form-group">
+                <x-input-label for="password" :value="__('Senha')" class="wedding-form-label" />
+                <x-text-input id="password" class="wedding-form-input" type="password" name="password" required autocomplete="current-password" />
+                <x-input-error :messages="$errors->get('password')" class="wedding-error-message" />
+            </div>
 
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
-        </div>
+            <!-- Remember Me -->
+            <div class="wedding-form-group">
+                <label for="remember_me" class="wedding-checkbox-container">
+                    <input id="remember_me" type="checkbox" class="wedding-checkbox" name="remember">
+                    <span class="wedding-checkbox-label">{{ __('Lembrar') }}</span>
+                </label>
+            </div>
 
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
-
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+            <div class="wedding-login-footer">
+                <button type="submit" class="wedding-login-button">
+                    {{ __('Acessar') }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+@endsection
