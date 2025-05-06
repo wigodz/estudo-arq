@@ -24,6 +24,7 @@
     html, body {
             height: 100%;
             margin: 0;
+            font-family: 'Montserrat', sans-serif;
             
             background-image: url({{ asset('storage/images/fundo-page.jpg') }});
             background-size: cover;
@@ -31,6 +32,26 @@
             background-attachment: fixed;
             background-position: center;
         }
+
+    .nav-link,
+    .dropdown-menu,
+    .dropdown-item,
+    .nav-tabs
+    button {
+        font-family: 'Montserrat', sans-serif !important;
+    }
+
+    .nav-tabs .nav-link {
+    color: #555 !important;
+    }
+
+    .nav-tabs .nav-link:hover {
+        color: #333 !important;
+    }
+
+    .nav-tabs .nav-link.active {
+        color: #000 !important;
+    }
 </style>
     <body>
         <div class="container">

@@ -81,19 +81,19 @@
             </div>
         </div>
     </div>
-        <ul class="nav justify-content-end nav-tabs ">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="home">Inicial</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="presenca">Confirmação</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="presentes">presentes</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Dúvidas</a>
-            </li>
-          </ul>
+    <ul class="nav justify-content-end nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link {{ request()->is('home') || request()->is('dashboard') ? 'active' :  '' }}" href="{{ url('home') }}">Inicial</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{ request()->is('presenca') ? 'active' : '' }}" href="{{ url('presenca') }}">Confirmação</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{ request()->is('presentes') ? 'active' : '' }}" href="{{ url('presentes') }}">Presentes</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{ request()->is('duvidas') ? 'active' : '' }}" href="{{ url('duvidas') }}">Dúvidas</a>
+        </li>
+    </ul>
     </nav>
 </header>
