@@ -19,6 +19,17 @@ body {
     overflow: hidden;
 }
 
+.container,
+.container-fluid,
+.container-xxl,
+.container-xl,
+.container-lg,
+.container-md,
+.container-sm {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
 /* Split screen container */
 .split-screen-container {
     position: relative;
