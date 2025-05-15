@@ -19,13 +19,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/presents/getGift', [GiftController::class, 'getGifts'])->name('presentes.get');
     Route::post('/gift/{id}', [GiftController::class, 'update'])->name('update.gift');
     Route::post('/create', [GiftController::class, 'store'])->name('create.gift');
-    Route::delete('/delete/{id}', [GiftController::class, 'delete'])->name('delete.gift');
-    Route::get('/home', [HomeController::class, 'show'])->name('home.index');
+    Route::post('/escolhe-presente', [GiftController::class, 'choseGift'])->name('chose.gift');
+    Route::delete('/delete/{id}', [GiftController::class, 'deleteGift'])->name('delete.gift');
+    Route::get('/presents/getCategoresGift', [GiftController::class, 'categoriesGift'])->name('categories.get');
 
+    Route::get('/home', [HomeController::class, 'show'])->name('home.index');
+    
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
+    
     Route::get('/presenca', [PresencaController::class, 'index'])->name('presenca.index');
     Route::post('/presenca/update-convidado', [PresencaController::class, 'updateConvidado'])->name('presenca.update-convidado');
     Route::post('/presenca/update-presenca', [PresencaController::class, 'updatepresenca'])->name('presenca.update-presenca');

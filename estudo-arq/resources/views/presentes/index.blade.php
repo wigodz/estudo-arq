@@ -34,6 +34,64 @@
         color: var(--light-text);
     }
 
+    /* Filter styles */
+    .filter-container {
+        background-color: var(--white);
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow);
+    }
+
+    .filter-title {
+        color: var(--primary-color);
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    .category-filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .category-filter {
+        background-color: var(--secondary-color);
+        color: var(--text-color);
+        border: 2px solid transparent;
+        border-radius: 20px;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 0.9rem;
+    }
+
+    .category-filter:hover {
+        background-color: #f5e5b8;
+    }
+
+    .category-filter.active {
+        background-color: var(--primary-color);
+        color: var(--white);
+        border-color: var(--primary-color);
+    }
+
+    .filter-reset {
+        background: none;
+        border: none;
+        color: var(--primary-color);
+        text-decoration: underline;
+        cursor: pointer;
+        margin-left: auto;
+        font-size: 0.9rem;
+    }
+
+    .filter-reset:hover {
+        color: #c69c6d;
+    }
+
+    /* Existing styles */
     .gifts-container .gift-card {
         background-color: var(--white);
         border-radius: 10px;
@@ -98,7 +156,7 @@
         margin-top: auto; /* Empurra os botões para o final do card */
     }
 
-    .btn-purchase, .btn-selected {
+    .btn-purchase, .btn-selected, .btn-link {
         display: block;
         width: 100%;
         padding: 0.8rem;
@@ -121,6 +179,18 @@
         background-color: #c69c6d;
     }
 
+    .btn-link {
+        background-color: var(--secondary-color);
+        color: var(--primary-color);
+        border: 1px solid var(--primary-color);
+        cursor: pointer;
+    }
+
+    .btn-link:hover {
+        background-color: var(--primary-color);
+        color: var(--white);
+    }
+
     .admin-actions {
         display: flex;
         gap: 0.5rem;
@@ -136,22 +206,94 @@
         color: var(--primary-color);
     }
 
+    /* Estilos melhorados para o modal */
     .modal-content {
-        border-radius: 10px;
+        border-radius: 15px;
+        border: none;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     }
 
     .modal-header {
         background-color: var(--primary-color);
         color: white;
-        border-radius: 10px 10px 0 0;
+        border-radius: 15px 15px 0 0;
+        padding: 1.5rem;
+        border-bottom: none;
     }
 
     .modal-title {
         color: white;
+        font-weight: 600;
+        font-size: 1.4rem;
+    }
+
+    .modal-body {
+        padding: 2rem;
+        text-align: center;
+    }
+
+    .modal-footer {
+        border-top: none;
+        padding: 1.5rem;
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .modal-footer .btn {
+        min-width: 120px;
+        padding: 0.8rem 1.5rem;
+        border-radius: 5px;
+        font-weight: 600;
+    }
+
+    .modal-footer .btn-secondary {
+        background-color: #e9e9e9;
+        color: var(--text-color);
+        border: none;
+    }
+
+    .modal-footer .btn-secondary:hover {
+        background-color: #d4d4d4;
+    }
+
+    .modal-footer .btn-purchase {
+        margin-bottom: 0;
+    }
+
+    /* Centralização do modal */
+    .modal-dialog {
+        display: flex;
+        align-items: center;
+        min-height: calc(100% - 3.5rem);
+    }
+
+    @media (min-width: 576px) {
+        .modal-dialog {
+            max-width: 500px;
+            margin: 1.75rem auto;
+        }
+    }
+
+    /* Animação para o modal */
+    .modal.fade .modal-dialog {
+        transition: transform 0.3s ease-out;
+        transform: scale(0.9);
+    }
+
+    .modal.show .modal-dialog {
+        transform: scale(1);
+    }
+
+    /* Destaque para o nome do presente no modal */
+    #giftName {
+        font-weight: 700;
+        color: var(--primary-color);
     }
 
     .btn-close {
         color: white;
+        opacity: 1;
     }
 
     .read-more-btn, .read-less-btn {
@@ -189,6 +331,24 @@
     .selected {
         opacity: 0.8;
     }
+
+    /* Estilo para quando não há presentes */
+    .no-gifts {
+        text-align: center;
+        padding: 3rem;
+        background-color: var(--white);
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+    }
+
+    .no-gifts h3 {
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+
+    .no-gifts p {
+        color: var(--light-text);
+    }
 </style>
 
 <!-- Modal para adicionar presente -->
@@ -215,11 +375,22 @@
                         <input type="url" class="form-control" id="url" name="url" required>
                     </div>
                     <div class="mb-3">
+                        <label for="categories" class="form-label">Categoria</label>
+                        <select name="categories" id="categories" class="form-select" required>
+                            <option value="" disabled selected>Selecione uma categoria</option>
+                            @foreach(\App\Models\Gift::getCategorias() as $key => $label)
+                                <option value="{{ $key }}">{{ $label }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-3">
                         <label for="image_path" class="form-label">Imagem (opcional)</label>
                         <input type="file" class="form-control" id="image_path" name="image_path" accept="image/*">
                     </div>
-                    <div>
-                        <button type="submit" class="btn btn-primary" style="background-color: var(--primary-color); border-color: var(--primary-color);">Criar presente</button>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary" style="background-color: var(--primary-color); border-color: var(--primary-color);">
+                            Criar presente
+                        </button>
                     </div>                
                 </form>
             </div>
@@ -233,11 +404,24 @@
         <p>Escolha um presente especial para celebrar nosso casamento</p>
     </header>
 
-    @if ($userLogado->is_admin)
-    <div class="d-flex justify-content-end mb-4">
-        <button class="btn btn-purchase" data-bs-toggle="modal" data-bs-target="#ModalCreateGift">Adicionar Presente</button>
+    <!-- Filtro por categoria -->
+    <div class="filter-container">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="filter-title mb-0">Filtrar por Categoria</h3>
+            <button type="button" class="filter-reset" id="resetFilter">Limpar filtros</button>
+        </div>
+        <div class="category-filters" id="categoryFilters">
+            <!-- Categorias serão carregadas aqui via JavaScript -->
+        </div>
     </div>
-    @endif
+
+    <div class="d-flex justify-content-between mb-4">
+        @if ($userLogado->is_admin)
+        <div>
+            <button class="btn btn-purchase" data-bs-toggle="modal" data-bs-target="#ModalCreateGift">Adicionar Presente</button>
+        </div>
+        @endif
+    </div>
 
     <div class="row gifts-container">
         <!-- Os presentes serão carregados aqui via JavaScript -->
@@ -250,17 +434,18 @@
     </nav>
 </div>
 
-<!-- Modal de confirmação -->
+<!-- Modal de confirmação com estilo melhorado -->
 <div class="modal fade" id="confirmationModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Confirmar Presente</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>Você está prestes a escolher <span id="giftName"></span>.</p>
-                <p>Deseja continuar?</p>
+                <p class="mb-2">Você está prestes a escolher:</p>
+                <p class="h4 mb-4" id="giftName"></p>
+                <p>Ao confirmar, este presente será reservado para você e ele não estará disponível para os outros convidados.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -270,22 +455,104 @@
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    const choseGiftUrl = "{{ route('chose.gift') }}";
+    const categoryMap = {
+        "Cozinha": 1,
+        "Sala de Estar": 2,
+        "Quarto": 3,
+        "Banheiro": 4,
+        "Lavanderia": 5,
+        "Área Externa": 6
+    };
+</script>
+
 <script>
     let currentPage = 1;
     let selectedGiftId = null;
     let selectedGiftUrl = null;
+    let selectedCategory = null;
+    let categories = [];
+
+    // Função para carregar as categorias
+    function loadCategories() {
+        fetch("{{ route('categories.get') }}")
+            .then(response => response.json())
+            .then(data => {
+                categories = data;
+                console.log(data)
+                renderCategoryFilters();
+            })
+            .catch(error => console.error('Erro ao carregar categorias:', error));
+    }
+
+    // Função para renderizar os filtros de categoria
+    function renderCategoryFilters() {
+        const filterContainer = document.getElementById('categoryFilters');
+        filterContainer.innerHTML = '<button type="button" class="category-filter active" data-category="all">Todos</button>';
+        
+        Object.entries(categories).forEach(([id, nome]) => {
+            console.log(id)
+            filterContainer.innerHTML += `<button type="button" class="category-filter" data-category="${id}">${nome}</button>`;
+        });
+
+        // Adicionar event listeners aos botões de filtro
+        document.querySelectorAll('.category-filter').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.category-filter').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                console.log(this)
+                selectedCategory = this.getAttribute('data-category');
+                if (selectedCategory === 'all') {
+                    selectedCategory = null;
+                }
+                
+                fetchGifts(1);
+            });
+        });
+
+        // Event listener para o botão de reset
+        document.getElementById('resetFilter').addEventListener('click', function() {
+            document.querySelector('.category-filter[data-category="all"]').classList.add('active');
+            document.querySelectorAll('.category-filter:not([data-category="all"])').forEach(btn => btn.classList.remove('active'));
+            selectedCategory = null;
+            fetchGifts(1);
+        });
+    }
 
     function fetchGifts(page = 1) {
         currentPage = page;
-        fetch(`{{ route('presentes.get') }}?page=${page}`)
+        let url = `{{ route('presentes.get') }}?page=${page}`;
+        
+        if (selectedCategory) {
+            url += `&category=${selectedCategory}`;
+        }
+        
+        fetch(url)
             .then(response => response.json())
             .then(data => {
                 let giftsContainer = document.querySelector('.gifts-container');
                 giftsContainer.innerHTML = '';
 
+                if (data.data.length === 0) {
+                    giftsContainer.innerHTML = `
+                        <div class="col-12">
+                            <div class="no-gifts">
+                                <h3>Nenhum presente encontrado</h3>
+                                <p>Não encontramos presentes com os filtros selecionados.</p>
+                            </div>
+                        </div>
+                    `;
+                    document.getElementById('pagination').style.display = 'none';
+                    return;
+                }
+
+                document.getElementById('pagination').style.display = 'flex';
+
                 data.data.forEach(gift => {
-                    // Verificar se o presente já foi escolhido (você precisará adicionar esta lógica no backend)
-                    const isSelected = gift.is_selected || false;
+                    // Verificar se o presente já foi escolhido
+                    const isSelected = !gift.avaliable || false;
                     
                     let giftElement = `
                         <div class="col-md-3 mb-4">
@@ -313,16 +580,15 @@
                                             `<button disabled class="btn-selected">Já Escolhido</button>`
                                         }
                                         
+                                        <!-- Botão de Link de Compra -->
+                                        <a href="${gift.url}" target="_blank" class="btn-link">Link de Compra</a>
+                                        
                                         @if ($userLogado->is_admin)
                                         <div class="admin-actions">
                                             <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#ModalEditGift${gift.id}">Editar</button>
-                                            <form action="/delete/gift/${gift.id}" method="POST" onsubmit="return confirm('Tem certeza que deseja deletar?');" style="display:inline;">
-                                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                                <input type="hidden" name="_method" value="DELETE">
-                                                <button type="submit" class="btn btn-sm btn-danger">
+                                            <button type="submit" class="btn btn-sm btn-danger" onclick="deleteGift(${gift.id})">
                                                     <i class="fas fa-trash"></i> Deletar
-                                                </button>
-                                            </form>
+                                            </button>
                                         </div>
                                         @endif
                                     </div>
@@ -341,6 +607,8 @@
                                     <div class="modal-body">
                                         <form action="{{ route('update.gift', ':id') }}".replace(':id', gift.id) method="POST" enctype="multipart/form-data">
                                             @csrf  
+                                            <input type="hidden" name="id" value="${gift.id}">
+
                                             <div class="mb-3">
                                                 <label for="name${gift.id}" class="form-label">Nome</label>
                                                 <input type="text" class="form-control" id="name${gift.id}" name="name" value="${gift.name}" required>
@@ -352,6 +620,14 @@
                                             <div class="mb-3">
                                                 <label for="url${gift.id}" class="form-label">URL</label>
                                                 <input type="url" class="form-control" id="url${gift.id}" name="url" value="${gift.url}" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="categories${gift.id}" class="form-label">Categoria</label>
+                                                <select name="categories" id="categories${gift.id}" class="form-select" required>
+                                                    @foreach(\App\Models\Gift::getCategorias() as $key => $label)
+                                                        <option value="{{ $key }}" ${gift.categories == "{{ $key }}" ? 'selected' : ''}>{{ $label }}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="image_path${gift.id}" class="form-label">Nova Imagem (opcional)</label>
@@ -410,43 +686,79 @@
         confirmationModal.show();
     }
 
-    // Configurar o botão de confirmação
-    document.getElementById('confirmGiftBtn').addEventListener('click', function() {
+    function deleteGift(giftId) {
+        let url = "{{ route('delete.gift', ':id') }}".replace(':id', giftId);
+        
+        Swal.fire({
+            title: "Deseja realmente deletar este presente?",
+            showCancelButton: true,
+            confirmButtonText: "Deletar Presente",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(url, {
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                })
+                .then(response => {
+                    if (response.data.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: response.data.message,
+                            showConfirmButton: true
+                        });
+                        fetchGifts(currentPage);
+                    }
+                })
+                .catch(error => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro ao deletar',
+                        text: 'Algo deu errado.'
+                    });
+                });
+            }
+        });
+    }
+
+    document.getElementById('confirmGiftBtn').addEventListener('click', function () {
         if (selectedGiftId) {
-            // Enviar solicitação para marcar o presente como selecionado
-            fetch('/api/gifts/select', {
-                method: 'POST',
+            var request = { id: selectedGiftId };
+
+            axios.post(choseGiftUrl, request, {
                 headers: {
-                    'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({ gift_id: selectedGiftId })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Redirecionar para a URL de compra
-                    window.open(selectedGiftUrl, '_blank');
-                    
-                    // Recarregar os presentes para atualizar a interface
-                    fetchGifts(currentPage);
-                    
-                    // Fechar o modal
-                    bootstrap.Modal.getInstance(document.getElementById('confirmationModal')).hide();
-                } else {
-                    alert('Este presente já foi escolhido por outra pessoa. Por favor, escolha outro presente.');
-                    fetchGifts(currentPage);
                 }
             })
+            .then(response => {
+                const data = response.data;
+
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Boa Escolha!',
+                        text: 'Presente separado para você.',
+                        showConfirmButton: true
+                    });
+                    bootstrap.Modal.getInstance(document.getElementById('confirmationModal')).hide();
+                }
+
+                fetchGifts(currentPage);
+            })
             .catch(error => {
-                console.error('Erro ao selecionar presente:', error);
-                alert('Ocorreu um erro ao selecionar o presente. Por favor, tente novamente.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Algo deu Errado',
+                    text: 'Ocorreu um erro ao separar o presente.'
+                });
             });
         }
     });
 
     document.addEventListener('DOMContentLoaded', function () {
+        loadCategories();
         fetchGifts();
     });
 </script>
+
 @endsection

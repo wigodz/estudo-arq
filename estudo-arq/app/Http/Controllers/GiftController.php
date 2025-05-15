@@ -21,6 +21,7 @@ class GiftController extends Controller
             'description' => $request->description,
             'url' => $request->url,
             'image_path' => $imagePath,
+            'categories' => $request->categories,
         ]);
 
         return to_route('presentes.index');
@@ -38,12 +39,12 @@ class GiftController extends Controller
         return to_route('presentes.index');
     }
     
-    public function delete(Request $request)
+    public function deleteGift(Request $request)
     {
         Gift::find($request->id)
             ->delete();
 
-        return to_route('presentes.index');
+        return response()->json(['message'=> 'presente deletado com sucesso.', 'success' => true]);
     }
 
     public function show ()
@@ -54,8 +55,39 @@ class GiftController extends Controller
 
     public function getGifts()
     {
-        $gifts = Gift::paginate(12);
+        $query = Gift::when(request()->input('category'), function ($q) {
+            $q->where('categories', request()->input('category'));
+        });
+            
+        $gifts = $query->paginate(12);
 
         return response()->json($gifts);
+    }
+
+    public function choseGift(Request $request)
+    {
+        $valideData = $request->validate([
+            'id' => 'required|integer',
+        ]);
+
+        $gift = Gift::find($valideData['id']);
+
+        if (! $gift) {
+            return response()->json(['message' => 'presente nao encontrado.'], 404);
+        }
+
+        $data = [
+            'user_id'   => auth()->user()->id,
+            'avaliable' => false,
+        ];
+
+        $gift->update($data);
+
+        return response()->json(['message'=> 'presente escolhido com sucesso.', 'success' => true]);
+    }
+
+    public function categoriesGift()
+    {
+        return Gift::getCategorias();
     }
 }
