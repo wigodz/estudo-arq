@@ -59,7 +59,8 @@ class GiftController extends Controller
             $q->where('categories', request()->input('category'));
         });
             
-        $gifts = $query->paginate(12);
+        $gifts = $query->orderBy('id','desc')
+            ->paginate(12);
 
         return response()->json($gifts);
     }

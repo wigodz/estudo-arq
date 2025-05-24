@@ -88,13 +88,13 @@
             color: #4f0c0f;
         }
         .montserrat-regular {
-            font-family: "Montserrat", sans-serif;
+            font-family: "Balkind";
             font-weight: 400;
             font-style: normal;
             color: #4f0c0f;
         }
         .balkind-regular {
-            font-family: "Balkind";
+            font-family: "Montserrat", sans-serif;
             font-style: normal;
             color: #4f0c0f;
         }
@@ -452,7 +452,7 @@
         </div>
         <div class="d-flex justify-content-between" id="section_presentes" style="width: 100%;">
             <div style="width: 60%;">
-                <p class="balkind-regular">Clique no botão para ir até a nossa lista...</p>
+                <p class="montserrat-regular">Clique no botão para ir até a nossa lista...</p>
             </div>
             <div style="width: 40%; display: flex; justify-content: center; align-items: center;">
                 <a href="/presentes" class="btn btn-outline" style="font-size: 1.8rem;">
@@ -470,7 +470,7 @@
         <div class="d-flex justify-content-center align-items-center" style="width: 100%;">
             <div style="width: 100%">
                 <button 
-                    class="btn btn-outline-light balkind-regular" 
+                    class="btn btn-outline-light montserrat-regular" 
                     data-bs-toggle="modal" 
                     data-bs-target="#imageModal">
                     Clique aqui e capture momentos conosco
