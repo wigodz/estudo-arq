@@ -495,7 +495,7 @@
 </div>
 
 <footer class="footer bg-peixe-relogio">
-    <p>&copy; 2024 Seu Nome. Todos os direitos reservados.</p>
+    <p>&copy; 2024 Wigo Amaral. Todos os direitos reservados.</p>
 </footer>
 <script>
     var swiper = new Swiper('.swiper-container', {

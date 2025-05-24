@@ -168,7 +168,18 @@
         margin-bottom: 1rem;
     }
 
-    .btn-purchase {
+    .btn-options {
+        display: block;
+        padding: 0.8rem;
+        text-align: center;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        margin-bottom: 1rem;
+    }
+
+    .btn-purchase, .btn-option {
         background-color: var(--primary-color);
         color: var(--white);
         border: none;
@@ -179,14 +190,14 @@
         background-color: #c69c6d;
     }
 
-    .btn-link {
+    .btn-link, .btn-option {
         background-color: var(--secondary-color);
         color: var(--primary-color);
         border: 1px solid var(--primary-color);
         cursor: pointer;
     }
 
-    .btn-link:hover {
+    .btn-link:hover, .btn-option:hover {
         background-color: var(--primary-color);
         color: var(--white);
     }
@@ -349,6 +360,58 @@
     .no-gifts p {
         color: var(--light-text);
     }
+    .info-modal .modal-content {
+        border-radius: 15px;
+        border: none;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+    .info-modal .modal-header {
+        background-color: var(--primary-color);
+        color: white;
+        border-radius: 15px 15px 0 0;
+        padding: 1.5rem;
+        border-bottom: none;
+    }
+    .info-field {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 1rem;
+    }
+    .info-field input {
+        flex: 1;
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        padding: 0.5rem;
+    }
+    .copy-btn {
+        background-color: var(--secondary-color);
+        color: var(--primary-color);
+        border: 1px solid var(--primary-color);
+        border-radius: 5px;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .copy-btn:hover {
+        background-color: var(--primary-color);
+        color: white;
+    }
+    .qr-code-container {
+        text-align: center;
+        margin-bottom: 2rem;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        align-content: center;
+    }
+    .qr-code-container img {
+        border: 2px solid var(--primary-color);
+        border-radius: 10px;
+        padding: 10px;
+        background-color: white;
+    }
 </style>
 
 <!-- Modal para adicionar presente -->
@@ -416,11 +479,21 @@
     </div>
 
     <div class="d-flex justify-content-between mb-4">
-        @if ($userLogado->is_admin)
-        <div>
-            <button class="btn btn-purchase" data-bs-toggle="modal" data-bs-target="#ModalCreateGift">Adicionar Presente</button>
+        <div class="d-flex gap-2">
+            @if ($userLogado->is_admin)
+            <button class="btn btn-option" data-bs-toggle="modal" data-bs-target="#ModalCreateGift">
+                Adicionar Presente
+            </button>
+            @endif
+            
+            <button class="btn btn-option" data-bs-toggle="modal" data-bs-target="#ModalDeliveryAddress">
+                <i class="fas fa-map-marker-alt me-2"></i>Endereço de Entrega
+            </button>
+
+            <button class="btn btn-option" data-bs-toggle="modal" data-bs-target="#ModalPixPayment">
+                <i class="fas fa-qrcode me-2"></i>PIX para Presente
+            </button>
         </div>
-        @endif
     </div>
 
     <div class="row gifts-container">
@@ -450,6 +523,84 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-purchase" id="confirmGiftBtn">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Novo Modal: Endereço de Entrega --}}
+<div class="modal fade info-modal" id="ModalDeliveryAddress" tabindex="-1" aria-labelledby="ModalDeliveryAddressLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalDeliveryAddressLabel">
+                    <i class="fas fa-map-marker-alt me-2"></i>Endereço para Entrega
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-4 text-muted">Informações para entrega dos presentes:</p>
+                
+                <div class="info-field">
+                    <label class="form-label mb-0" style="min-width: 80px;">Cidade:</label>
+                    <input type="text" class="form-control" value="Governador Valadares" readonly id="delivery-city">
+                    <button type="button" class="copy-btn" onclick="copyToClipboard('delivery-city', 'Cidade')">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+
+                <div class="info-field">
+                    <label class="form-label mb-0" style="min-width: 80px;">CEP:</label>
+                    <input type="text" class="form-control" value="35050-320" readonly id="delivery-cep">
+                    <button type="button" class="copy-btn" onclick="copyToClipboard('delivery-cep', 'CEP')">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+
+                <div class="info-field">
+                    <label class="form-label mb-0" style="min-width: 80px;">Rua:</label>
+                    <input type="text" class="form-control" value="R. Rosa Maria de Souza, 330" readonly id="delivery-street">
+                    <button type="button" class="copy-btn" onclick="copyToClipboard('delivery-street', 'Rua')">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+
+                <div class="info-field">
+                    <label class="form-label mb-0" style="min-width: 80px;">Bairro:</label>
+                    <input type="text" class="form-control" value="Sagrada Família" readonly id="delivery-neighborhood">
+                    <button type="button" class="copy-btn" onclick="copyToClipboard('delivery-neighborhood', 'Número')">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Novo Modal: PIX --}}
+<div class="modal fade info-modal" id="ModalPixPayment" tabindex="-1" aria-labelledby="ModalPixPaymentLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalPixPaymentLabel">
+                    <i class="fas fa-qrcode me-2"></i>Presentes via PIX
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-4 text-muted">Use o QR Code ou a chave PIX para nos presentear:</p>
+                
+                <div class="qr-code-container">
+                    <img src="{{ asset('storage/images/pix.jpg') }}" alt="QR Code PIX" width="200" height="200">
+                </div>
+
+                <div class="info-field">
+                    <label class="form-label mb-0" style="min-width: 100px;">Chave PIX:</label>
+                    <input type="text" class="form-control" value="33e78200-e17d-44dd-a592-4519c51f9f39" readonly id="pix-key">
+                    <button type="button" class="copy-btn" onclick="copyToClipboard('pix-key', 'Chave PIX')">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -759,6 +910,68 @@
         loadCategories();
         fetchGifts();
     });
+</script>
+
+<script>
+    function copyToClipboard(elementId, label) {
+        const element = document.getElementById(elementId);
+        const text = element.value;
+        
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text).then(function() {
+                showCopySuccess(label);
+            }).catch(function(err) {
+                fallbackCopyTextToClipboard(text, label);
+            });
+        } else {
+            fallbackCopyTextToClipboard(text, label);
+        }
+    }
+
+    function fallbackCopyTextToClipboard(text, label) {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.top = "0";
+        textArea.style.left = "0";
+        textArea.style.position = "fixed";
+        
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        try {
+            const successful = document.execCommand('copy');
+            if (successful) {
+                showCopySuccess(label);
+            } else {
+                showCopyError();
+            }
+        } catch (err) {
+            showCopyError();
+        }
+        
+        document.body.removeChild(textArea);
+    }
+
+    function showCopySuccess(label) {
+        Swal.fire({
+            icon: 'success',
+            title: 'Copiado!',
+            text: `${label} copiado para a área de transferência.`,
+            timer: 2000,
+            showConfirmButton: false
+        });
+    }
+
+    function showCopyError() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: 'Não foi possível copiar o texto.',
+            timer: 2000,
+            showConfirmButton: false
+        });
+    }
 </script>
 
 @endsection
