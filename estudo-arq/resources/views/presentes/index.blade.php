@@ -211,6 +211,13 @@
     .pagination .page-item.active .page-link {
         background-color: var(--primary-color);
         border-color: var(--primary-color);
+        color: var(--white);
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+        color: var(--white);
     }
 
     .pagination .page-link {
@@ -673,7 +680,11 @@
     }
 
     function fetchGifts(page = 1) {
-        currentPage = page;
+        var currentPage = page;
+        if (page !== currentPage) {
+            scrollToTop();
+        }
+
         let url = `{{ route('presentes.get') }}?page=${page}`;
         
         if (selectedCategory) {
@@ -803,17 +814,17 @@
         paginationContainer.innerHTML = '';
 
         paginationContainer.innerHTML += `<li class="page-item ${data.current_page === 1 ? 'disabled' : ''}">
-            <a class="page-link" href="#" onclick="fetchGifts(${data.current_page - 1}); return false;">&laquo;</a>
+            <a class="page-link" href="#" onclick="fetchGifts(${data.current_page - 1}); scrollToTop(); return false;">&laquo;</a>
         </li>`;
 
         for (let i = 1; i <= data.last_page; i++) {
             paginationContainer.innerHTML += `<li class="page-item ${data.current_page === i ? 'active' : ''}">
-                <a class="page-link" href="#" onclick="fetchGifts(${i}); return false;">${i}</a>
+                <a class="page-link" href="#" onclick="fetchGifts(${i});  scrollToTop(); return false;">${i}</a>
             </li>`;
         }
 
         paginationContainer.innerHTML += `<li class="page-item ${data.current_page === data.last_page ? 'disabled' : ''}">
-            <a class="page-link" href="#" onclick="fetchGifts(${data.current_page + 1}); return false;">&raquo;</a>
+            <a class="page-link" href="#" onclick="fetchGifts(${data.current_page + 1});  scrollToTop(); return false;">&raquo;</a>
         </li>`;
     }
 
@@ -970,6 +981,13 @@
             text: 'Não foi possível copiar o texto.',
             timer: 2000,
             showConfirmButton: false
+        });
+    }
+
+    function scrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
         });
     }
 </script>
