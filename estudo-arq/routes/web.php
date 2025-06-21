@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DuvidasController;
 use App\Http\Controllers\GiftController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PresencaController;
@@ -33,6 +34,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/presenca/update-convidado', [PresencaController::class, 'updateConvidado'])->name('presenca.update-convidado');
     Route::post('/presenca/update-presenca', [PresencaController::class, 'updatepresenca'])->name('presenca.update-presenca');
 
+    Route::get('/duvidas', [DuvidasController::class, 'index']);
 });
 
 require __DIR__.'/auth.php';
