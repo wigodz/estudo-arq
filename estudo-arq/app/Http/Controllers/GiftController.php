@@ -50,7 +50,9 @@ class GiftController extends Controller
     public function show ()
     {
         $userLogado = auth()->user();
-        return view('presentes.index', compact('userLogado'));
+        $presentesEscolhidos = Gift::where('user_id', $userLogado->id)->count();
+
+        return view('presentes.index', compact('userLogado', 'presentesEscolhidos'));
     }
 
     public function getGifts()

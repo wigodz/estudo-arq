@@ -8,11 +8,31 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function store($data)
+    public function store(Request $request)
     {
-        $data->toArray;
+        $data = $request->validate([
+            'name'     => 'string|max:60',
+            'email'    => 'string|max:100',
+            'telefone' => 'string|max:60',
+            'password' => 'string|max:60',
+        ]);
+
+        $telefone = preg_replace('/\D/', '', $data['telefone']);
+        $data['telefone'] = $telefone;
+
         User::create($data);
 
-        return response()->json('Usuario criado');
+        return response()->json(['message' => 'Usuario criado', 'success' => true]);
+    }
+
+    public function adminView()
+    {
+        $user = auth()->user();
+
+        if (! $user->is_admin) {
+            return view('home.index')->with('você não possui acesso há esta página.');
+        }
+
+        return view('admin.index');
     }
 }

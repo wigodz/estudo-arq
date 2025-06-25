@@ -528,8 +528,8 @@
                 <p>Ao confirmar, este presente será reservado para você e ele não estará disponível para os outros convidados.</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-purchase" id="confirmGiftBtn">Confirmar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             </div>
         </div>
     </div>
@@ -639,7 +639,6 @@
             .then(response => response.json())
             .then(data => {
                 categories = data;
-                console.log(data)
                 renderCategoryFilters();
             })
             .catch(error => console.error('Erro ao carregar categorias:', error));
@@ -651,7 +650,6 @@
         filterContainer.innerHTML = '<button type="button" class="category-filter active" data-category="all">Todos</button>';
         
         Object.entries(categories).forEach(([id, nome]) => {
-            console.log(id)
             filterContainer.innerHTML += `<button type="button" class="category-filter" data-category="${id}">${nome}</button>`;
         });
 
@@ -660,7 +658,6 @@
             button.addEventListener('click', function() {
                 document.querySelectorAll('.category-filter').forEach(btn => btn.classList.remove('active'));
                 this.classList.add('active');
-                console.log(this)
                 selectedCategory = this.getAttribute('data-category');
                 if (selectedCategory === 'all') {
                     selectedCategory = null;
@@ -715,6 +712,7 @@
                 data.data.forEach(gift => {
                     // Verificar se o presente já foi escolhido
                     const isSelected = !gift.avaliable || false;
+                    const qtdPresentes = {{ $presentesEscolhidos }};
                     
                     let giftElement = `
                         <div class="col-md-3 mb-4">
@@ -737,7 +735,7 @@
                                     </div>
                                     
                                     <div class="gift-buttons">
-                                        ${!isSelected ? 
+                                        ${!isSelected && qtdPresentes <= 3 ? 
                                             `<button onclick="selectGift(${gift.id}, '${gift.name}', '${gift.url}')" class="btn-purchase">Presentear</button>` : 
                                             `<button disabled class="btn-selected">Já Escolhido</button>`
                                         }
