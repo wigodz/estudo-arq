@@ -3,6 +3,7 @@
 use App\Http\Controllers\DuvidasController;
 use App\Http\Controllers\GiftController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MensagensController;
 use App\Http\Controllers\PresencaController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
@@ -39,6 +40,16 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/admin', [UserController::class, 'adminView'])->name('admin.index');
     Route::post('/create-user', [UserController::class, 'store'])->name('admin.store');
+
+    Route::get('/whatsapp-qr', function () {
+        return view('whatsapp.qr');
+    })->name('wpp.index');
+
+    Route::get('/qr-proxy', function () {
+        $qr = file_get_contents('http://67.205.128.65:3000/qr');
+        return response($qr)->header('Content-Type', 'image/png');
+    });
+    Route::post('/envia-mensagens', [MensagensController::class, 'enviaMensagens'])->name('enviar.mensagem.massa');
 });
 
 require __DIR__.'/auth.php';
